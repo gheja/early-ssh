@@ -27,6 +27,8 @@ cat DEBIAN/files | xargs md5sum > DEBIAN/md5sums
 # echo "etc/early-ssh/early-ssh.conf" > DEBIAN/conffiles
 echo -n "" > DEBIAN/conffiles
 
+cat ../changelog > DEBIAN/changelog
+
 chmod 755 DEBIAN
 chmod 644 DEBIAN/changelog
 chmod 644 DEBIAN/conffiles
