@@ -34,7 +34,13 @@ cp -rp /etc/localtime $DESTDIR/etc/
 [ -f /root/.ssh/authorized_keys ] && cp -rp /root/.ssh/authorized_keys $DESTDIR/root/.ssh/authorized_keys
 cp -rp /etc/login.defs $DESTDIR/etc/
 cp -rp /etc/early-ssh/early-ssh.conf $DESTDIR/etc/early-ssh/
-cp -rp /lib/libnss_files* $DESTDIR/lib/
+
+ls -1 /lib/libnss_files* 2>/dev/null >/dev/null
+if [ $? == 0 ]; then
+	cp -rp /lib/libnss_files* $DESTDIR/lib/
+else
+	cp -rp `dpkg -L libc6 | grep '/libnss_files' | tr '\n' ' '` $DESTDIR/lib/
+fi
 
 ln -s /usr/lib/libz.so.1 $DESTDIR/usr/libz.so.1
 
