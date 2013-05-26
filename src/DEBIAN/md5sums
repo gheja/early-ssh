@@ -1,3 +1,1 @@
-0ebd43d039fb2b3c11064c653622e9ef  usr/share/initramfs-tools/hooks/early_ssh
-5e6e4b2ffa4796e27314b3ef108b0916  usr/share/initramfs-tools/scripts/local-top/early_ssh
-7786c3701227a212241a462f5359b4af  etc/early-ssh/early-ssh.conf.dist
+# will be overwritten by the package builder script

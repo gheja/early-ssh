@@ -1,5 +1,5 @@
 Package: early-ssh
-Version: 0.3.6-1
+Version: __VERSION__
 Section: net
 Priority: optional
 Architecture: all
