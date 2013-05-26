@@ -1,0 +1,37 @@
+2012-07-13 v0.3.5 (Friday)
+    * Removed vim from initramfs-tools install hook
+    * Corrected a comment
+    * Added /sbin to PATH by default
+
+2012-xx-xx v0.3.4
+    * MAC address to interface search produced lockups with specific grep
+      versions - changed to a simpler method
+    * Replaced e-mail address antispam strategy
+
+2012-xx-xx v0.3.3
+    * Added PASSWD_OVERRIDE config variable
+    * Added SHADOW_OVERRIDE config variable
+    * Added GROUP_OVERRIDE config variables
+    * The interface can now be determined by MAC address
+
+2012-02-02 v0.3.2
+    * Set Early-ssh disabled by default (DISABLED=1 in conf)
+
+2011-05-20 v0.3.1
+    * /usr/bin/vim.tiny is now added to the initramfs image
+
+2011-05-03 v0.3
+    * Cleaned up empty values in debian package information
+    * Moved initramfs-tools scripts from /etc to /usr/share
+    * Changed the informations displayed on boot to be more verbose
+      iface, ip, netmask, gateway, port, version number are displayed now
+
+2009-05-31 v0.2
+    * Added some messages about the update-initramfs to the postinst script
+    * scp is copied (if openssh-client is installed (/usr/bin/scp))
+    * bugfix: the debian package can now be installed on all architectures
+    * bugfix: dropbear now killed properly
+    * bugfix: the correct interface gets shut down now
+
+2009-04-18 v0.1
+    * Initial release
