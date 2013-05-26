@@ -1,0 +1,64 @@
+#!/bin/bash
+
+PREREQ=""
+prereqs()
+{
+	echo "$PREREQ"
+}
+
+case $1 in
+prereqs)
+	prereqs
+	exit 0
+	;;
+esac
+
+# load initramfs' hook functions
+source /usr/share/initramfs-tools/hook-functions
+
+# create the needed directories
+for i in /etc/dropbear /etc/early-ssh /root /root/.ssh /sbin /bin /usr/bin /var /var/log; do
+	[ ! -e "${DESTDIR}${i}" ] && mkdir -p "${DESTDIR}${i}"
+done
+
+# copy the needed executables
+copy_exec /usr/sbin/dropbear sbin/
+copy_exec /sbin/ifconfig sbin/
+copy_exec /sbin/route sbin/
+[ -f /usr/bin/scp ] && copy_exec /usr/bin/scp bin/
+
+# copy the configs
+cp -rp /etc/dropbear/dropbear_dss_host_key $DESTDIR/etc/dropbear/
+cp -rp /etc/dropbear/dropbear_rsa_host_key $DESTDIR/etc/dropbear/
+cp -rp /etc/localtime $DESTDIR/etc/
+[ -f /root/.ssh/authorized_keys ] && cp -rp /root/.ssh/authorized_keys $DESTDIR/root/.ssh/authorized_keys
+cp -rp /etc/login.defs $DESTDIR/etc/
+cp -rp /etc/early-ssh/early-ssh.conf $DESTDIR/etc/early-ssh/
+cp -rp /lib/libnss_files* $DESTDIR/lib/
+
+ln -s /usr/lib/libz.so.1 $DESTDIR/usr/libz.so.1
+
+echo "passwd: files
+group: files
+shadow: files
+" > $DESTDIR/etc/nsswitch.conf
+
+. /etc/early-ssh/early-ssh.conf
+
+if [ "$PASSWD_OVERRIDE" != "" ]; then
+	cat $PASSWD_OVERRIDE >> $DESTDIR/etc/passwd
+else
+	cat /etc/passwd | grep -E '^root:' | sed -e 's/:\/bin\/bash/:\/bin\/sh/' >> $DESTDIR/etc/passwd
+fi
+
+if [ "$SHADOW_OVERRIDE" != "" ]; then
+	cat $SHADOW_OVERRIDE >> $DESTDIR/etc/shadow
+else
+	cat /etc/shadow | grep -E '^root:' >> $DESTDIR/etc/shadow
+fi
+
+if [ "$SHADOW_OVERRIDE" != "" ]; then
+	cat $GROUP_OVERRIDE >> $DESTDIR/etc/group
+else
+	cat /etc/group | grep -E '^root:' >> $DESTDIR/etc/group
+fi

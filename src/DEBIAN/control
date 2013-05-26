@@ -1,0 +1,15 @@
+Package: early-ssh
+Version: 0.3.6-1
+Section: net
+Priority: optional
+Architecture: all
+Depends: dropbear, initramfs-tools, net-tools, libc6, zlib1g
+Suggests: openssh-client
+Maintainer: Gabor Heja <early-ssh@dev.kakaopor.hu>
+Description: Adds a boottime SSH server into initramfs
+ Early-ssh gives you the possibility to connect to your machine over SSH
+ just before the root filesystem gets mounted, so you can unlock any
+ crypto disks, assemble/manage mdadm RAID arrays "by hand", run fsck on
+ root filesystem in read-write mode, and so on.
+ It provides scp as well (if openssh-client is installed on your system
+ while updating the initramfs) so you can copy files to your initramfs.

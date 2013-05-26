@@ -1,0 +1,24 @@
+If you would like to compile a .deb (Debian) package, please copy all the files
+into a separate directory, remove ALL the .hg directories and this reminder.
+
+Please don't forget to fix the permissions as the following on and under the
+DEBIAN directory:
+
+chmod 755 DEBIAN
+chmod 644 DEBIAN/changelog
+chmod 644 DEBIAN/conffiles
+chmod 644 DEBIAN/control
+chmod 644 DEBIAN/copyright
+chmod 644 DEBIAN/files
+chmod 644 DEBIAN/md5sums
+chmod 755 DEBIAN/postinst
+
+
+Update the md5sums file by the following:
+md5sum usr/share/initramfs-tools/hooks/early_ssh \
+    usr/share/initramfs-tools/scripts/local-top/early_ssh \
+    etc/early-ssh/early-ssh.conf.dist > DEBIAN/md5sums
+
+
+After this you can create your own debian package by issuing:
+dpkg --build /path/to/your/directory /path/to/package.deb

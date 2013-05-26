@@ -1,0 +1,29 @@
+#!/bin/sh
+# This is the configuration for early-ssh.
+# This file is a simple shell script, so its syntax is the same.
+
+### PLEASE DO NOT FORGET TO UPDATE YOUR INITRAMFS AFTER MODIFYING THIS FILE ###
+
+DISABLED=1
+INTERFACE="eth0" 
+IP="192.168.0.1"
+PORT="22"
+NETMASK="255.255.255.0"
+GATEWAY="192.168.0.254"
+TIMEOUT="600" # in seconds (empty means disabled, will wait forever)
+
+### advanced setup ###
+
+# "INTERFACE" can also be a MAC address. If the MAC address is not found on any
+# interfaces the first one will be used (eth0) - this can avoid cases where a
+# network card change would render a system unreachable.
+# INTERFACE="MAC 01:02:03:04:05:06"
+
+# By default the early-ssh copies the "root" user entry from the passwd, shadow
+# and group files (also replaces the /bin/bash shell to /bin/sh). If that is not
+# wanted (e.g. early-ssh "root" user should use a different password or shell)
+# here you can configure the specific passwd, shadow and group files by
+# uncommenting and configuring the following lines and creating the files.
+# PASSWD_OVERRIDE="/etc/early-ssh/passwd"
+# SHADOW_OVERRIDE="/etc/early-ssh/shadow"
+# GROUP_OVERRIDE="/etc/early-ssh/group"

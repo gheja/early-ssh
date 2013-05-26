@@ -1,0 +1,52 @@
+#!/bin/sh -e
+
+umask 0077
+
+[ ! -d /etc/early-ssh ] && mkdir -p /etc/early-ssh
+
+if [ ! -f /etc/early-ssh/early-ssh.conf ]; then
+
+#	TODO: autodetect settings and write to config
+
+	cp /etc/early-ssh/early-ssh.conf.dist /etc/early-ssh/early-ssh.conf
+
+	echo "I: Configuration file not found -- I have created one for you,"
+	echo "I: you can find it in /etc/early-ssh"
+	echo "I: Please note: Early-ssh is now disabled by default -- enable it by"
+	echo "I:              editing its config file (set DISABLED to 0)."
+else
+	echo "I: Configuration file found -- it has been left as is."
+fi
+
+echo "I: Please do not forget to rebuild your initramfs after modifying the config."
+echo "I: To update all initramfs images use update-initramfs -u -k all"
+echo "I: To update the current initramfs image use update-initramfs -u -k `uname -r`"
+
+# upgrade stuffs
+if [ -e /etc/initramfs-tools/scripts/local-top/early_ssh ] || [ -e /etc/initramfs-tools/hooks/early_ssh ]; then
+	echo "I: The scripts of early-ssh moved from /etc/initramfs-tools to "
+	echo "I: /usr/share/initramfs-tools in 0.3"
+	
+	sum=`md5sum /etc/initramfs-tools/scripts/local-top/early_ssh`
+	if [ "$sum" == "f17b1c07a9ce0ae07cd9f3e88fec9a4d" ] || [ "$sum" == "92a6584afc4056f87e3e446481c69cf2" ]; then
+	echo "I: /etc/initramfs-tools/scripts/local-top/early_ssh seems to be "
+	echo "I: untouched - removing."
+		rm -v /etc/initramfs-tools/scripts/local-top/early_ssh
+	else
+		echo "W: /etc/initramfs-tools/scripts/local-top/early_ssh seems to be altered!"
+		echo "W: Please remove it manually!"
+		exit 1
+	fi
+	
+	sum=`md5sum /etc/initramfs-tools/hooks/early_ssh`
+	if [ "$sum" == "47b3000a96fccab40407d5725ea616aa" ] || [ "$sum" == "edfd969c4e034cb7337e7ad3fd265682" ]; then
+		echo "I: /etc/initramfs-tools/hooks/early_ssh seems to be untouched - removing."
+		rm -v /etc/initramfs-tools/hooks/early_ssh
+	else
+		echo "W: /etc/initramfs-tools/hooks/early_ssh seems to be altered!"
+		echo "W: Please remove it manually!"
+		exit 1
+	fi
+fi
+
+exit 0

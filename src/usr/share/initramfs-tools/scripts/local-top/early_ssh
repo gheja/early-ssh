@@ -1,0 +1,128 @@
+#!/bin/sh
+
+PREREQ=""
+
+prereqs()
+{
+	echo "$PREREQ"
+}
+
+case $1 in
+# get pre-requisites
+prereqs)
+	prereqs
+	exit 0
+	;;
+esac
+
+version="0.3.6"
+
+. /etc/early-ssh/early-ssh.conf
+
+if [ "$DISABLED" == 1 ]; then
+	echo "*** early-ssh disabled in config - exiting."
+	exit 0
+fi
+
+# give a short summary of the current configuration and find out the
+# interface by MAC address (if given that way)
+echo ""
+echo "*** early-ssh $version ***"
+echo "$INTERFACE" | grep -Eq '^MAC '
+if [ $? == 0 ]; then
+	mac=`echo $INTERFACE | cut -d ' ' -f 2 | tr '[a-z]' '[A-Z]'`
+	echo -n "Searching for interface by MAC address $mac... "
+	new_interface=`ifconfig -a 2>/dev/null | grep -i "$mac" | awk '{ print $1; }'`
+	if [ "$new_interface" == "" ]; then
+		echo "not found. Defaulting to eth0."
+		INTERFACE="eth0"
+	else
+		echo "found: $new_interface"
+		INTERFACE="$new_interface"
+	fi
+fi
+echo "  iface:   $INTERFACE"
+echo "  ip:      $IP"
+echo "  netmask: $NETMASK"
+echo "  gateway: $GATEWAY"
+echo "  port:    $PORT"
+echo ""
+
+
+# create the needed pts directory for the terminals
+mkdir /dev/pts
+mount -t devpts devpts /dev/pts
+
+# set up networking
+/sbin/ifconfig $INTERFACE $IP netmask $NETMASK up
+/sbin/route add default gw $GATEWAY
+
+# create an motd file to show the user what to do
+if [ ! -f /etc/motd ]; then
+	x=".kakao"
+	cat > /etc/motd << EOF
+Welcome to early-ssh!
+
+After you have finished everything, run the following to continue booting:
+  finished
+
+
+Please send your comments and bugreports to <early-ssh@dev${x}por.hu>
+EOF
+fi
+
+# create a script to mark when finished over SSH
+cat > /bin/finished << EOF
+#!/bin/sh
+echo "Your session will be now terminated and the boot will be continued. Bye!"
+touch /tmp/early_ssh.finished
+EOF
+chmod 700 /bin/finished
+
+# add /sbin to the PATH by default
+echo 'export PATH="/sbin:$PATH"' >> /etc/profile
+
+# dropbear does not work properly with /dev/random
+mv /dev/random /dev/random.old
+ln -s /dev/urandom /dev/random
+
+# start the dropbear in the background
+/sbin/dropbear -d /etc/dropbear/dropbear_dss_host_key -r /etc/dropbear/dropbear_rsa_host_key -E -F -p $PORT &
+dropbear_pid=$!
+
+# give a notice to the user he/she can log in over SSH now
+if [ "$TIMEOUT" == "" ]; then
+	echo "*** Now you can log in over SSH or you can press enter to continue booting."
+else
+	echo "*** Now you can log in over SSH. You can press enter or wait $TIMEOUT seconds to continue booting."
+fi
+
+timeout=$TIMEOUT
+
+while [ /bin/true ]; do
+	# check if the user presses enter
+	read -t 1 tmp
+	[ "$?" == 0 ] && break
+	
+	# if this file exists, the user have run "finished"
+	[ -f /tmp/early_ssh.finished ] && break
+	
+	# check for the timeout, if it is enabled
+	if [ "$TIMEOUT" != "" ]; then
+		timeout=$((timeout - 1))
+		[ $timeout = 0 ] && break
+	fi
+done
+
+# restore the entropy device
+rm /dev/random
+mv /dev/random.old /dev/random
+rm /bin/finished
+
+# kill dropbear ssh server
+kill `pidof dropbear`
+
+# shut down the networking
+ifconfig $INTERFACE down
+
+exit 0
