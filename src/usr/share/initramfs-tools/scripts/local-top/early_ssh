@@ -24,6 +24,9 @@ if [ "$DISABLED" == 1 ]; then
 	exit 0
 fi
 
+# kill any previously existing dropbear ssh server instances
+kill `pidof dropbear`
+
 # give a short summary of the current configuration and find out the
 # interface by MAC address (if given that way)
 echo ""
