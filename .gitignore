@@ -1,2 +1,3 @@
 build_deb/
 .build_deb_version
+*.deb
