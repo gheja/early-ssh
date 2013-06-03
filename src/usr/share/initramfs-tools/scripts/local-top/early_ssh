@@ -62,15 +62,18 @@ mount -t devpts devpts /dev/pts
 
 # create an motd file to show the user what to do
 if [ ! -f /etc/motd ]; then
-	x=".kakao"
 	cat > /etc/motd << EOF
+early-ssh (version $version)
+-------------------------------------------------------------------------------
+
 Welcome to early-ssh!
 
-After you have finished everything, run the following to continue booting:
+After you have finished everything, run the following to continue the boot:
   finished
 
+For issues, bugreports, comments and contacts please see the project page:
+  https://github.com/gheja/early-ssh
 
-Please send your comments and bugreports to <early-ssh@dev${x}por.hu>
 EOF
 fi
 
