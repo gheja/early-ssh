@@ -9,7 +9,8 @@ A real-life example with RAID-1 and LUKS
 ----------------------------------------
 
 content of zaphod-init.sh
-```#!/bin/sh
+```
+#!/bin/sh
 
 # load the RAID-1 module for mdadm
 modprobe raid1
@@ -27,10 +28,12 @@ mdadm --assemble --scan --config /tmp/mdadm.conf
 modprobe dm-crypt
 
 # do the LUKS openings (md0 is the /boot, so it is not encrypted!)
-for i in 1 2 3; do cryptsetup --key-file /tmp/zaphod-md${i}.key luksOpen /dev/md${i} md${i}_crypt; done```
+for i in 1 2 3; do cryptsetup --key-file /tmp/zaphod-md${i}.key luksOpen /dev/md${i} md${i}_crypt; done
+```
 
 An SSH session:
-```mobilem00:/mnt/pendrive# scp zaphod-init/* root@xxx.xxx.xxx.xxx:/tmp
+```
+mobilem00:/mnt/pendrive# scp zaphod-init/* root@xxx.xxx.xxx.xxx:/tmp
 root@xxx.xxx.xxx.xxx's password:
 zaphod-init.sh                                 100%  338     0.3KB/s   00:00
 zaphod-md1.key                                 100%  256     0.3KB/s   00:00
@@ -70,30 +73,36 @@ Command successful.
 Your session will be now terminated and the boot will be continued. Bye!
 
 Connection to xxx.xxx.xxx.xxx closed by remote host.
-Connection to xxx.xxx.xxx.xxx closed.```
+Connection to xxx.xxx.xxx.xxx closed.
+```
 
 
 mdadm RAID assembly example [draft]
 ---------------------------
 
-```ssh root@1.2.3.4
+```
+ssh root@1.2.3.4
 modprobe raid1
 mdadm --examine --scan > /tmp/mdadm.conf
 mdadm --assemble --scan --config /tmp/mdadm.conf
-finished```
+finished
+```
 
 LUKS device unlocking example [draft]
 -----------------------------
 
-```ssh root@1.2.3.4
+```
+ssh root@1.2.3.4
 modprobe dm_crypt
 cryptsetup luksOpen /dev/sda2 sda2_crypt
-finished```
+finished
+```
 
 advanced setup (mdadm + drbd + LUKS + LVM) [draft]
 ------------------------------------
 
-```ssh root@1.2.3.4
+```
+ssh root@1.2.3.4
 modprobe raid1
 mdadm --examine --scan > /tmp/mdadm.conf
 mdadm --assemble --scan --config /tmp/mdadm.conf
@@ -110,5 +119,6 @@ cryptsetup luksOpen /dev/drbd0 drbd0_crypt
 pvscan
 vgchange -a y
 
-finished```
+finished
+```
 
