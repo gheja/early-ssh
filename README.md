@@ -14,30 +14,30 @@ You can copy files to the server using scp from a remote host. This way you it i
 ### Dedicated root password
 It is possible to use a different root password than the one use on your system (it can be disabled as well) by adding a SHADOW_OVERRIDE option specifying a different shadow file.
 
-See PASSWD_OVERRIDE, SHADOW_OVERRIDE, GROUP_OVERRIDE in config.
+See `PASSWD_OVERRIDE`, `SHADOW_OVERRIDE`, `GROUP_OVERRIDE` in config.
 
-Example: SHADOW_OVERRIDE="/etc/early-ssh/shadow"
+Example: `SHADOW_OVERRIDE="/etc/early-ssh/shadow"`
 
 ### Timeout to continue the boot
 A timeout can be specified to continue the boot after a certain time.
 
-See TIMEOUT in config.
+See `TIMEOUT` in config.
 
-Example: TIMEOUT=600
+Example: `TIMEOUT=600`
 
 ### Specify network interface by MAC address
 If you have more than one network interface and they get scrambled on boot it is possible to specify the correct interface by MAC address instead of the name ("eth0" for example).
 
-See IFACE in config.
+See `IFACE` in config.
 
-Example: IFACE="MAC 01:02:03:04:05:06"
+Example: `IFACE="MAC 01:02:03:04:05:06"`
 
 ### Put your ssh server on a different port
 You can move the early-ssh server on a different port.
 
-See PORT in config.
+See `PORT` in config.
 
-Example: PORT=2233
+Example: `PORT=2233`
 
 
 A real-life example with RAID-1 and LUKS
