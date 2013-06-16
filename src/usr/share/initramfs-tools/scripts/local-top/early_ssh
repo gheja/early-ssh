@@ -44,11 +44,11 @@ if [ $? == 0 ]; then
 		INTERFACE="$new_interface"
 	fi
 fi
-echo "  iface:   $INTERFACE"
-echo "  ip:      $IP"
-echo "  netmask: $NETMASK"
-echo "  gateway: $GATEWAY"
-echo "  port:    $PORT"
+echo "  Network interface: $INTERFACE"
+echo "  IP address:        $IP"
+echo "  Subnet mask:       $NETMASK"
+echo "  Default gateway:   $GATEWAY"
+echo "  SSH port:          $PORT"
 echo ""
 
 
