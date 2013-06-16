@@ -63,7 +63,7 @@ else
 	cat /etc/shadow | grep -E '^root:' >> $DESTDIR/etc/shadow
 fi
 
-if [ "$SHADOW_OVERRIDE" != "" ]; then
+if [ "$GROUP_OVERRIDE" != "" ]; then
 	cat $GROUP_OVERRIDE >> $DESTDIR/etc/group
 else
 	cat /etc/group | grep -E '^root:' >> $DESTDIR/etc/group
