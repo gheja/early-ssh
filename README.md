@@ -12,7 +12,7 @@ Features
 You can copy files to the server using scp from a remote host. This way you it is possible to copy key files to unlock key-based LUKS even for the root filesystem.
 
 ### Dedicated root password
-It is possible to use a different root password than the one use on your system (it can be disabled as well) by adding a SHADOW_OVERRIDE option specifying a different shadow file.
+It is possible to use a different root password than the one use on your system (it can be disabled as well) by adding a `SHADOW_OVERRIDE` option specifying a different shadow file.
 
 See `PASSWD_OVERRIDE`, `SHADOW_OVERRIDE`, `GROUP_OVERRIDE` in config.
 
