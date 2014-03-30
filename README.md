@@ -157,3 +157,4 @@ vgchange -a y
 finished
 ```
 
+![Google Analytics tracking](http://gabor.heja.hu/google_analytics_tracking/23)
