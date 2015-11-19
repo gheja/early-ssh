@@ -1,15 +1,15 @@
 early-ssh
 =========
 
-early-ssh gives you an SSH server during the boot of your Linux system. It starts before the root filesystem is mounted so you can unlock your encrypted root filesystem interactively, you don't have to be at the console of your server. You can also scp files to your server so you can even start your key-encrypted system.
+early-ssh gives you an SSH server during the boot of your Linux system. It starts before the root filesystem is mounted so you can unlock your encrypted root filesystem remotely.
 
-early-ssh is basically an update-iniramfs hook script and a boot script that starts dropbear SSH server in the initramfs during boot.
+early-ssh is basically an update-iniramfs hook script and a boot script that starts the dropbear SSH server in the initramfs during boot.
 
 Features
 --------
 
 ### SCP to the server
-You can copy files to the server using scp from a remote host. This way you it is possible to copy key files to unlock key-based LUKS even for the root filesystem.
+You can copy files to the server using scp from a remote host. This enables you to copy key files to unlock key-based LUKS even for the root filesystem.
 
 ### Dedicated root password
 It is possible to use a different root password than the one use on your system (it can be disabled as well) by adding a `SHADOW_OVERRIDE` option specifying a different shadow file.
