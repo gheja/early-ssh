@@ -43,8 +43,8 @@ Example: `PORT=2233`
 A real-life example with RAID-1 and LUKS
 ----------------------------------------
 
-content of zaphod-init.sh
-```
+Content of `zaphod-init.sh`
+```sh
 #!/bin/sh
 
 # load the RAID-1 module for mdadm
