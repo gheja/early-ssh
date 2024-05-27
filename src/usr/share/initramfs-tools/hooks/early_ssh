@@ -31,7 +31,6 @@ copy_exec /sbin/route sbin/
 cp -rp /etc/dropbear/dropbear_dss_host_key $DESTDIR/etc/dropbear/
 cp -rp /etc/dropbear/dropbear_rsa_host_key $DESTDIR/etc/dropbear/
 cp -rp /etc/localtime $DESTDIR/etc/
-[ -f /root/.ssh/authorized_keys ] && cp -rp /root/.ssh/authorized_keys $DESTDIR/root/.ssh/authorized_keys
 cp -rp /etc/login.defs $DESTDIR/etc/
 cp -rp /etc/early-ssh/early-ssh.conf $DESTDIR/etc/early-ssh/
 
@@ -50,6 +49,12 @@ shadow: files
 " > $DESTDIR/etc/nsswitch.conf
 
 . /etc/early-ssh/early-ssh.conf
+
+if [ "$AUTHKEY_OVERRIDE" != "" ]; then
+	cp -rp $AUTHKEY_OVERRIDE $DESTDIR/root/.ssh/authorized_keys
+else
+	[ -f /root/.ssh/authorized_keys ] && cp -rp /root/.ssh/authorized_keys $DESTDIR/root/.ssh/authorized_keys
+fi
 
 if [ "$PASSWD_OVERRIDE" != "" ]; then
 	cat $PASSWD_OVERRIDE >> $DESTDIR/etc/passwd
