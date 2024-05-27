@@ -1,4 +1,5 @@
 unreleased
+    * Changed exit status to exit cleanly only if "finished" is typed.
     * Fix error from kill when no previous dropbear running.
 
 2013-xx-xx v0.3.7
