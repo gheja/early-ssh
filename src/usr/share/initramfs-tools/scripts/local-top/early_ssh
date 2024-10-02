@@ -19,13 +19,17 @@ version="0.3.7-testing"
 
 . /etc/early-ssh/early-ssh.conf
 
+exitcode=1
+
 if [ "$DISABLED" == 1 ]; then
 	echo "*** early-ssh disabled in config - exiting."
-	exit 0
+	exit $exitcode
 fi
 
 # kill any previously existing dropbear ssh server instances
-kill `pidof dropbear`
+if pidof -q dropbear; then
+	kill `pidof dropbear`
+fi
 
 # give a short summary of the current configuration and find out the
 # interface by MAC address (if given that way)
@@ -111,7 +115,10 @@ while [ /bin/true ]; do
 	[ "$?" == 0 ] && break
 	
 	# if this file exists, the user have run "finished"
-	[ -f /tmp/early_ssh.finished ] && break
+	if [ -f /tmp/early_ssh.finished ]; then
+		exitcode=0
+		break
+	fi
 	
 	# check for the timeout, if it is enabled
 	if [ "$TIMEOUT" != "" ]; then
@@ -131,4 +138,4 @@ kill `pidof dropbear`
 # shut down the networking
 ifconfig $INTERFACE down
 
-exit 0
+exit $exitcode

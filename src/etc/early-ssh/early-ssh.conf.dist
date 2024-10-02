@@ -27,3 +27,13 @@ TIMEOUT="600" # in seconds (empty means disabled, will wait forever)
 # PASSWD_OVERRIDE="/etc/early-ssh/passwd"
 # SHADOW_OVERRIDE="/etc/early-ssh/shadow"
 # GROUP_OVERRIDE="/etc/early-ssh/group"
+
+# By default early-ssh copies the host's dropbear host's keys. The directory
+# containing the host keys may be overriden below.
+# HOSTKEYDIR_OVERRIDE="/etc/early-ssh/"
+
+# By default early-ssh copies the root user's authorized_keys file. The
+# authorized_keys file may be overriden below. Please ensure the file is
+# owned by user or root, and not writable by group or others. (i.e. `chmod
+# 600 ...`)
+# AUTHKEY_OVERRIDE="/etc/early-ssh/authorized_keys"
